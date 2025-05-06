@@ -1,8 +1,8 @@
 Package: com.dvntm.firstlook
 Name: FirstLook
-Version: 0.0.1
+Version: 0.0.2
 Architecture: iphoneos-arm
-Description: First look for last look tweak
+Description: First look for the LastLook tweak
 Maintainer: dvntm
 Author: dvntm
 Section: Tweaks
