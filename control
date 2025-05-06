@@ -1,0 +1,9 @@
+Package: com.dvntm.firstlook
+Name: FirstLook
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: First look for last look tweak
+Maintainer: dvntm
+Author: dvntm
+Section: Tweaks
+Depends: mobilesubstrate (>= 0.9.5000), com.anthopak.lastlook
