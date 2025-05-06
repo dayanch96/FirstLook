@@ -5,6 +5,8 @@
 #import "Headers/SBBacklightController.h"
 
 @interface LastLookManager : NSObject
+@property (nonatomic, assign, readwrite) BOOL isActive;
+
 + (instancetype)sharedInstance;
 @end
 
@@ -51,9 +53,11 @@ void notifyBlankedScreen(CFNotificationCenterRef center, void *observer, CFStrin
     // Source 12 is a notification...
     if (state == 1 && source == 12 && isLastLookEnabled()) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            SBBacklightController *sbbc = [%c(SBBacklightController) sharedInstanceIfExists];
-            [sbbc setBacklightState:1 source:667];
-            [sbbc setBacklightState:3 source:667];
+            if ([[%c(LastLookManager) sharedInstance] isActive]) {
+                SBBacklightController *sbbc = [%c(SBBacklightController) sharedInstanceIfExists];
+                [sbbc setBacklightState:1 source:667];
+                [sbbc setBacklightState:3 source:667];
+            }
         });
     }
 }
