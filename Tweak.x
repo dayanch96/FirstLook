@@ -28,7 +28,7 @@ void notifyBlankedScreen(CFNotificationCenterRef center, void *observer, CFStrin
         [flman scheduleScreenDim];
     }
 
-    if ((state == 1 && source == 3) || (state == 3 && source == 8)) {
+    else {
         [flman cancelSchedule];
     }
 }
