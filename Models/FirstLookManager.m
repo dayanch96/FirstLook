@@ -22,6 +22,8 @@
     _lastLookTimer = [NSTimer scheduledTimerWithTimeInterval:self.stayOnDuration * 0.9 repeats:NO block:^(NSTimer * _Nonnull timer) {
         SBLockScreenManager *sblsm = [NSClassFromString(@"SBLockScreenManager") sharedInstance];
         if (self.isAODEnabled && sblsm.isLockScreenActive) {
+            [[NSClassFromString(@"LLTouchManager") sharedInstance] startListeningTouchEvents];
+
             SBBacklightController *sbbc = [NSClassFromString(@"SBBacklightController") sharedInstanceIfExists];
             [sbbc _startFadeOutAnimationFromLockSource:3];
         }

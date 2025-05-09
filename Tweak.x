@@ -11,6 +11,8 @@ void notifyBlankedScreen(CFNotificationCenterRef center, void *observer, CFStrin
             return;
         }
 
+        [[%c(LLTouchManager) sharedInstance] startListeningTouchEvents];
+
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [sbbc _startFadeOutAnimationFromLockSource:3];
         });

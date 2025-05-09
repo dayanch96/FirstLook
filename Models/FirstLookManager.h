@@ -4,6 +4,7 @@
 #import "../Headers/SBBacklightController.h"
 #import "../Headers/SBLockScreenManager.h"
 #import "../Headers/LastLookManager.h"
+#import "../Headers/LLTouchManager.h"
 
 @interface FirstLookManager : NSObject
 + (instancetype)sharedInstance;
