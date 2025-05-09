@@ -2,13 +2,18 @@
 
 #import "../Headers/CCUIModuleInstanceManager.h"
 #import "../Headers/SBBacklightController.h"
+#import "../Headers/SBLockScreenManager.h"
 #import "../Headers/LastLookManager.h"
 
 @interface FirstLookManager : NSObject
 + (instancetype)sharedInstance;
 
+- (void)scheduleLastLook;
+- (void)cancelLastLook;
 - (void)scheduleScreenDim;
-- (void)cancelSchedule;
+- (void)cancelScreenDim;
+
 - (CGFloat)stayOnDuration;
 - (BOOL)isLastLookEnabled;
+- (BOOL)isAODEnabled;
 @end

@@ -29,8 +29,18 @@ void notifyBlankedScreen(CFNotificationCenterRef center, void *observer, CFStrin
     }
 
     else {
-        [flman cancelSchedule];
+        [flman cancelScreenDim];
     }
+}
+%end
+
+%hook UNNotificationRequest
++ (instancetype)requestWithIdentifier:(id)arg1 pushPayload:(id)arg2 bundleIdentifier:(id)arg3 {
+    if ([[%c(SBLockScreenManager) sharedInstanceIfExists] isLockScreenActive]) {
+        [[FirstLookManager sharedInstance] scheduleScreenDim];
+    }
+
+    return %orig;
 }
 %end
 

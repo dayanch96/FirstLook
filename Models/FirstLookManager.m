@@ -1,7 +1,8 @@
 #import "FirstLookManager.h"
 
 @implementation FirstLookManager {
-    NSTimer *_timer;
+    NSTimer *_lastLookTimer;
+    NSTimer *_screenDimTimer;
 }
 
 + (instancetype)sharedInstance {
@@ -15,10 +16,27 @@
     return instance;
 }
 
-- (void)scheduleScreenDim {
-    [self cancelSchedule];
+- (void)scheduleLastLook {
+    [self cancelLastLook];
 
-    _timer = [NSTimer scheduledTimerWithTimeInterval:self.stayOnDuration repeats:NO block:^(NSTimer * _Nonnull timer) {
+    _lastLookTimer = [NSTimer scheduledTimerWithTimeInterval:self.stayOnDuration * 0.9 repeats:NO block:^(NSTimer * _Nonnull timer) {
+        SBLockScreenManager *sblsm = [NSClassFromString(@"SBLockScreenManager") sharedInstance];
+        if (self.isAODEnabled && sblsm.isLockScreenActive) {
+            SBBacklightController *sbbc = [NSClassFromString(@"SBBacklightController") sharedInstanceIfExists];
+            [sbbc _startFadeOutAnimationFromLockSource:3];
+        }
+    }];
+}
+
+- (void)cancelLastLook {
+    [_lastLookTimer invalidate];
+    _lastLookTimer = nil;
+}
+
+- (void)scheduleScreenDim {
+    [self cancelScreenDim];
+
+    _screenDimTimer = [NSTimer scheduledTimerWithTimeInterval:self.stayOnDuration repeats:NO block:^(NSTimer * _Nonnull timer) {
         if (self.isLastLookActive) {
             SBBacklightController *sbbc = [NSClassFromString(@"SBBacklightController") sharedInstanceIfExists];
             [sbbc setBacklightState:1 source:667];
@@ -27,9 +45,13 @@
     }];
 }
 
-- (void)cancelSchedule {
-    [_timer invalidate];
-    _timer = nil;
+- (void)cancelScreenDim {
+    [_screenDimTimer invalidate];
+    _screenDimTimer = nil;
+}
+
+- (BOOL)isLastLookActive {
+    return [[NSClassFromString(@"LastLookManager") sharedInstance] isActive];
 }
 
 - (CGFloat)stayOnDuration {
@@ -63,8 +85,21 @@
     return YES;
 }
 
-- (BOOL)isLastLookActive {
-    return [[NSClassFromString(@"LastLookManager") sharedInstance] isActive];
+- (BOOL)isAODEnabled {
+    LastLookManager *llman = [NSClassFromString(@"LastLookManager") sharedInstance];
+    if (class_getInstanceVariable([llman class], "enabled") == NULL) {
+        return NO;
+    }
+
+    if (![[llman valueForKey:@"enabled"] boolValue]) {
+        return NO;
+    }
+
+    if (class_getInstanceVariable([llman class], "AOD_enabled") == NULL) {
+        return NO;
+    }
+
+    return [[llman valueForKey:@"AOD_enabled"] boolValue];
 }
 
 @end
