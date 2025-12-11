@@ -21,7 +21,7 @@
 
     _lastLookTimer = [NSTimer scheduledTimerWithTimeInterval:self.stayOnDuration * 0.9 repeats:NO block:^(NSTimer * _Nonnull timer) {
         SBLockScreenManager *sblsm = [NSClassFromString(@"SBLockScreenManager") sharedInstance];
-        if (self.isAODEnabled && sblsm.isLockScreenActive) {
+        if (self.isAODEnabled && sblsm.isLockScreenActive && !self.isOnCall) {
             [[NSClassFromString(@"LLTouchManager") sharedInstance] startListeningTouchEvents];
 
             SBBacklightController *sbbc = [NSClassFromString(@"SBBacklightController") sharedInstanceIfExists];
@@ -39,7 +39,7 @@
     [self cancelScreenDim];
 
     _screenDimTimer = [NSTimer scheduledTimerWithTimeInterval:self.stayOnDuration repeats:NO block:^(NSTimer * _Nonnull timer) {
-        if (self.isLastLookActive) {
+        if (self.isLastLookActive && !self.isOnCall) {
             SBBacklightController *sbbc = [NSClassFromString(@"SBBacklightController") sharedInstanceIfExists];
             [sbbc setBacklightState:1 source:667];
             [sbbc setBacklightState:3 source:667];
@@ -54,6 +54,10 @@
 
 - (BOOL)isLastLookActive {
     return [[NSClassFromString(@"LastLookManager") sharedInstance] isActive];
+}
+
+- (BOOL)isOnCall {
+    return [[NSClassFromString(@"MRUCallMonitor") sharedMonitor] isOnCall];
 }
 
 - (CGFloat)stayOnDuration {

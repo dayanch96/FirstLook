@@ -3,6 +3,7 @@
 #import "../Headers/CCUIModuleInstanceManager.h"
 #import "../Headers/SBBacklightController.h"
 #import "../Headers/SBLockScreenManager.h"
+#import "../Headers/MRUCallMonitor.h"
 #import "../Headers/LastLookManager.h"
 #import "../Headers/LLTouchManager.h"
 
@@ -17,4 +18,5 @@
 - (CGFloat)stayOnDuration;
 - (BOOL)isLastLookEnabled;
 - (BOOL)isAODEnabled;
+- (BOOL)isOnCall;
 @end
